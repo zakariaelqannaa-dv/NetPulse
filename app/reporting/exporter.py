@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
@@ -20,7 +20,7 @@ from app.reporting.redaction import collect_sensitive_fields, redact_report_data
 from app.reporting.txt_report import render_txt
 
 
-class ReportFormat(str, Enum):
+class ReportFormat(StrEnum):
     JSON = "json"
     TXT = "txt"
     HTML = "html"
@@ -74,7 +74,10 @@ def default_filename(
             moment = datetime.fromisoformat(str(stamp)) if stamp else datetime.now()
         except ValueError:
             moment = datetime.now()
-    return f"NetPulse-report-{moment.astimezone().strftime('%Y-%m-%d_%H%M%S')}{FORMAT_EXTENSIONS[fmt]}"
+    return (
+        f"NetPulse-report-{moment.astimezone().strftime('%Y-%m-%d_%H%M%S')}"
+        f"{FORMAT_EXTENSIONS[fmt]}"
+    )
 
 
 def export_report(

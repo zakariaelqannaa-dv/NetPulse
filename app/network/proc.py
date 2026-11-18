@@ -10,6 +10,7 @@ Rules enforced here:
 
 from __future__ import annotations
 
+import contextlib
 import ctypes
 import os
 import shutil
@@ -40,7 +41,12 @@ class CommandResult:
 
     @property
     def ok(self) -> bool:
-        return self.error is None and not self.timed_out and not self.cancelled and self.returncode == 0
+        return (
+            self.error is None
+            and not self.timed_out
+            and not self.cancelled
+            and self.returncode == 0
+        )
 
     @property
     def combined(self) -> str:
@@ -65,10 +71,7 @@ def _windows_code_page(kind: str) -> str | None:
     if os.name != "nt":
         return None
     try:
-        if kind == "oem":
-            code = ctypes.windll.kernel32.GetOEMCP()  # type: ignore[attr-defined]
-        else:
-            code = ctypes.windll.kernel32.GetACP()  # type: ignore[attr-defined]
+        code = ctypes.windll.kernel32.GetOEMCP() if kind == "oem" else ctypes.windll.kernel32.GetACP()  # type: ignore[attr-defined]
     except Exception:  # pragma: no cover - non Windows / restricted
         return None
     if not code:
@@ -181,14 +184,10 @@ def run_command(
 
 
 def _terminate(process: subprocess.Popen) -> None:  # pragma: no cover - exercised on live systems
-    try:
+    with contextlib.suppress(Exception):
         process.kill()
-    except Exception:
-        pass
-    try:
+    with contextlib.suppress(Exception):
         process.communicate(timeout=2)
-    except Exception:
-        pass
 
 
 def which(program: str) -> str | None:

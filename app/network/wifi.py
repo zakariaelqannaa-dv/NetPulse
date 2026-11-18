@@ -117,7 +117,17 @@ _LABEL_ALIASES: dict[str, set[str]] = {
         "taxadetransmissao",
         "zendsnelheid",
     },
-    "band": {"band", "frequenzband", "banda", "диапазон", "频段", "頻段", "バンド", "대역", "faixa"},
+    "band": {
+        "band",
+        "frequenzband",
+        "banda",
+        "диапазон",
+        "频段",
+        "頻段",
+        "バンド",
+        "대역",
+        "faixa",
+    },
 }
 
 _CONNECTED_STATES = {
@@ -288,7 +298,10 @@ def parse_wlan_interfaces(text: str) -> WifiInfo:
     state_lower = (state or "").lower()
     if state_lower in _DISCONNECTED_STATES:
         info.available = True
-        info.message = "A Wi-Fi interface exists but is not connected, so radio metrics are unavailable."
+        info.message = (
+            "A Wi-Fi interface exists but is not connected, so radio metrics "
+            "are unavailable."
+        )
     elif not info.ssid and not info.signal_percent:
         info.available = False
         info.message = "A Wi-Fi adapter was found but no associated network was reported."

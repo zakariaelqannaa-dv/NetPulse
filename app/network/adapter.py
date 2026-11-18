@@ -184,9 +184,14 @@ def parse_adapter_dump(text: str) -> AdapterSnapshot:
             index = _safe_int(parts[1])
             next_hop = parts[2]
             adapter = by_index.get(index or -1)
-            if adapter is not None and next_hop and next_hop not in ("0.0.0.0", "::"):
-                if kind == "GW" and adapter.gateway is None:
-                    adapter.gateway = next_hop
+            if (
+                adapter is not None
+                and next_hop
+                and next_hop not in ("0.0.0.0", "::")  # noqa: S104 - excluding unspecified addresses, not binding
+                and kind == "GW"
+                and adapter.gateway is None
+            ):
+                adapter.gateway = next_hop
 
         elif kind == "DNS" and len(parts) >= 4:
             index = _safe_int(parts[1])
@@ -315,7 +320,11 @@ def collect_with_psutil() -> AdapterSnapshot:
         stat = stats.get(name)
         if stat is not None and not stat.isup:
             continue
-        adapter = AdapterInfo(name=name, status="Up" if (stat and stat.isup) else "Unknown", source="psutil")
+        adapter = AdapterInfo(
+            name=name,
+            status="Up" if (stat and stat.isup) else "Unknown",
+            source="psutil",
+        )
         adapter.is_wireless = any(marker in name.lower() for marker in WIFI_MEDIA_MARKERS)
         adapter.media_type = "Wi-Fi" if adapter.is_wireless else "Ethernet"
         if stat is not None and stat.speed:
@@ -325,7 +334,10 @@ def collect_with_psutil() -> AdapterSnapshot:
             family = getattr(addr, "family", None)
             if family == socket.AF_INET:
                 adapter.ipv4.append(addr.address)
-            elif family == socket.AF_INET6 and not str(addr.address).lower().startswith("fe80"):
+            elif (
+                family == socket.AF_INET6
+                and not str(addr.address).lower().startswith("fe80")
+            ):
                 adapter.ipv6.append(addr.address)
             elif str(family) == "AddressFamily.AF_LINK" or family == getattr(psutil, "AF_LINK", None):
                 adapter.mac_address = addr.address
@@ -334,7 +346,9 @@ def collect_with_psutil() -> AdapterSnapshot:
                 adapter.gateway = gateway
             snapshot.adapters.append(adapter)
 
-    snapshot.adapters.sort(key=lambda a: (a.gateway is None, looks_virtual(a.name, a.description)))
+    snapshot.adapters.sort(
+        key=lambda a: (a.gateway is None, looks_virtual(a.name, a.description))
+    )
     snapshot.active_adapter = pick_active_adapter(snapshot.adapters)
     snapshot.message = (
         "PowerShell was unavailable, so NetPulse used a reduced fallback. "
@@ -343,7 +357,9 @@ def collect_with_psutil() -> AdapterSnapshot:
     return snapshot
 
 
-def collect_adapters(token: CancellationToken | None = None, timeout: float = 20.0) -> AdapterSnapshot:
+def collect_adapters(
+    token: CancellationToken | None = None, timeout: float = 20.0
+) -> AdapterSnapshot:
     """Collect adapter information, degrading gracefully."""
     if powershell_available():
         result = run_powershell(ADAPTER_SCRIPT, timeout=timeout, token=token)
@@ -356,7 +372,8 @@ def collect_adapters(token: CancellationToken | None = None, timeout: float = 20
             if snapshot.adapters:
                 return snapshot
             snapshot.message = (
-                snapshot.message or "PowerShell returned no active adapters; using the fallback collector."
+                snapshot.message
+                or "PowerShell returned no active adapters; using the fallback collector."
             )
         fallback = collect_with_psutil()
         if not fallback.message:

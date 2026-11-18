@@ -13,7 +13,11 @@ from dataclasses import dataclass, field
 
 #: "time=13ms", "time<1ms" and their localised equivalents.
 _RTT_PATTERNS = [
-    re.compile(r"(?:time|时间|時間|tiempo|temps|zeit|время|tempo|timp|čas|aika|tijd|czas)\s*([=<])\s*(\d+(?:[.,]\d+)?)\s*ms", re.IGNORECASE),
+    re.compile(
+        r"(?:time|时间|時間|tiempo|temps|zeit|время|tempo|timp|čas|aika|tijd|czas)"
+        r"\s*([=<])\s*(\d+(?:[.,]\d+)?)\s*ms",
+        re.IGNORECASE,
+    ),
     re.compile(r"([=<])\s*(\d+(?:[.,]\d+)?)\s*ms", re.IGNORECASE),
 ]
 

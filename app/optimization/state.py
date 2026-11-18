@@ -287,7 +287,10 @@ def build_checks(state: NetworkState, link_speed_mbps: float | None = None, is_w
                 finding=(
                     ""
                     if is_default
-                    else f"Receive Window Auto-Tuning is set to '{_AUTOTUNING_LABELS.get(level, level)}' instead of the Windows default 'Normal'."
+                    else (
+                        f"Receive Window Auto-Tuning is set to '{_AUTOTUNING_LABELS.get(level, level)}' "
+                        "instead of the Windows default 'Normal'."
+                    ),
                 ),
                 recommendation=(
                     ""
@@ -432,7 +435,10 @@ def build_checks(state: NetworkState, link_speed_mbps: float | None = None, is_w
                     "affect how quickly a page starts loading, but never the ping to an address that is "
                     "already resolved."
                 ),
-                recommendation="Only consider changing DNS if the report shows slow lookups and a public resolver was measurably faster.",
+                recommendation=(
+                        "Only consider changing DNS if the report shows slow lookups and a public resolver "
+                        "was measurably faster."
+                    ),
             )
         )
 

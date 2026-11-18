@@ -170,7 +170,8 @@ class WindowsIcmpPinger(BasePinger):
 
     def _ensure_handle(self) -> int:
         if self._handle is None or self._handle == ctypes.c_void_p(-1).value:
-            assert self._dll is not None
+            if self._dll is None:
+                raise OSError("Windows IP Helper API (iphlpapi.dll) is not available")
             self._handle = self._dll.IcmpCreateFile()
             if not self._handle or self._handle == ctypes.c_void_p(-1).value:
                 raise OSError("IcmpCreateFile failed")
@@ -188,7 +189,11 @@ class WindowsIcmpPinger(BasePinger):
             except OSError as exc:
                 return PingReply(ok=False, error=f"Name resolution failed: {exc}")
 
-        assert self._dll is not None
+        if self._dll is None:
+            return PingReply(
+                ok=False,
+                error="Windows IP Helper API (iphlpapi.dll) is not available",
+            )
         payload = ctypes.create_string_buffer(self._PAYLOAD, len(self._PAYLOAD))
         options = _IP_OPTION_INFORMATION(Ttl=64, Tos=0, Flags=0, OptionsSize=0, OptionsData=None)
         timeout = max(int(timeout_ms), 1)
@@ -211,7 +216,9 @@ class WindowsIcmpPinger(BasePinger):
             )
             if not count:
                 error_code = ctypes.get_last_error() if hasattr(ctypes, "get_last_error") else 0
-                message = _STATUS_MESSAGES.get(error_code, f"ICMP request failed (code {error_code})")
+                message = _STATUS_MESSAGES.get(
+                    error_code, f"ICMP request failed (code {error_code})"
+                )
                 return PingReply(
                     ok=False,
                     error=message,

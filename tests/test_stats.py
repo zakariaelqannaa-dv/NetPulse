@@ -6,6 +6,7 @@ network connection nor Windows.
 
 from __future__ import annotations
 
+from app.core.models import PingSample
 from app.core.stats import (
     DEFAULT_THRESHOLDS,
     mean_absolute_consecutive_difference,
@@ -18,8 +19,6 @@ from app.core.stats import (
     summarize_samples,
     worst_rating,
 )
-from app.core.models import LatencyStats, PingSample
-
 
 # --------------------------------------------------------------------------- #
 # summarize_rtts

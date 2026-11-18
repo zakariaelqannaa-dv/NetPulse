@@ -18,7 +18,10 @@ from app.network.ping import resolve_target
 from app.network.proc import run_command
 from app.network.validation import validate_host
 
-_IPV4_RE = re.compile(r"\b(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}\b")
+_IPV4_RE = re.compile(
+    r"\b(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)"
+    r"(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}\b"
+)
 _IPV6_RE = re.compile(r"\b(?:[0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}\b")
 _HOP_RE = re.compile(r"^\s*(\d{1,3})\s+(.*)$")
 #: One entry per probe of a hop: either an RTT token or a ``*`` placeholder.
@@ -167,12 +170,22 @@ def run_route_trace(
     try:
         target = validate_host(config.target)
     except ValueError as exc:
-        return RouteTrace(target=config.target, status=TestStatus.ERROR, message=str(exc))
-    config = RouteConfig(target=target, max_hops=config.max_hops, probe_timeout_ms=config.probe_timeout_ms)
+        return RouteTrace(
+            target=config.target, status=TestStatus.ERROR, message=str(exc)
+        )
+    config = RouteConfig(
+        target=target,
+        max_hops=config.max_hops,
+        probe_timeout_ms=config.probe_timeout_ms,
+    )
 
     resolved, resolve_error = resolve_target(target)
     if resolved is None:
-        return RouteTrace(target=target, status=TestStatus.ERROR, message=resolve_error or "Unresolvable target")
+        return RouteTrace(
+            target=target,
+            status=TestStatus.ERROR,
+            message=resolve_error or "Unresolvable target",
+        )
 
     result = run_command(
         build_trace_command(config),

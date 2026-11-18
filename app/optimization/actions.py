@@ -483,10 +483,7 @@ def restore_snapshot_object(
             )
             continue
 
-        if entry.undo_args:
-            outcome = runner.args(entry.undo_args)
-        else:
-            outcome = runner.ps(entry.undo_script)
+        outcome = runner.args(entry.undo_args) if entry.undo_args else runner.ps(entry.undo_script)
         records.append(
             ChangeRecord(
                 action_id=entry.action_id,

@@ -51,7 +51,7 @@ def measure_download(
         result.error = str(exc)
         return result
 
-    request = urllib.request.Request(url, headers={"User-Agent": f"NetPulse/{APP_VERSION}"})
+    request = urllib.request.Request(url, headers={"User-Agent": f"NetPulse/{APP_VERSION}"})  # noqa: S310 - user supplied URL
     started = time.monotonic()
     downloaded = 0
     try:

@@ -230,7 +230,8 @@ class MainWindow(QMainWindow):
         )
         summary = report.headline or "Diagnosis finished."
         self._status(
-            f"{summary}  |  {len(report.diagnoses)} finding(s)  |  {report.duration_ms / 1000.0:.1f} s"
+            f"{summary}  |  {len(report.diagnoses)} finding(s)  |  "
+            f"{report.duration_ms / 1000.0:.1f} s"
         )
 
     def _on_failed(self, message: str) -> None:
@@ -300,7 +301,9 @@ class MainWindow(QMainWindow):
         try:
             target = export_report(report_data, fmt, path, dialog.chosen_keys())
         except OSError as exc:
-            QMessageBox.critical(self, "Report not written", f"The report could not be written:\n{exc}")
+            QMessageBox.critical(
+                self, "Report not written", f"The report could not be written:\n{exc}"
+            )
             return
         self._status(f"Report written to {target}")
         QMessageBox.information(self, "Report exported", f"The report was written to:\n{target}")

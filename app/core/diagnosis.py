@@ -374,7 +374,11 @@ def rule_internet(report: DiagnosticReport, th: dict[str, float]) -> list[Diagno
                     rule_id="WAN-001",
                     finding="ICMP replies are blocked, but TCP connections still work",
                     evidence=evidence_common
-                    + [f"TCP handshake succeeded to {p.host}:{p.port} ({p.connect_ms:.0f} ms)" if p.connect_ms else "" for p in report.tcp_probes if p.connected],
+                    + [
+                        f"TCP handshake succeeded to {p.host}:{p.port} ({p.connect_ms:.0f} ms)"
+                        if p.connect_ms else ""
+                        for p in report.tcp_probes if p.connected
+                    ],
                     confidence=Confidence.HIGH,
                     severity=Severity.INFO,
                     meaning=(
@@ -382,7 +386,10 @@ def rule_internet(report: DiagnosticReport, th: dict[str, float]) -> list[Diagno
                         "so latency and loss numbers based on ICMP are not reliable here."
                     ),
                     recommendation="Use the TCP and DNS results in this report and repeat the diagnosis at another time.",
-                    cannot_verify="Which device filters ICMP, and the real latency of your applications, which is destination specific.",
+                    cannot_verify=(
+                        "Which device filters ICMP, and the real latency of your applications, "
+                        "which is destination specific."
+                    ),
                     category="wan",
                 )
             )
@@ -449,13 +456,17 @@ def rule_internet(report: DiagnosticReport, th: dict[str, float]) -> list[Diagno
                     "Loss towards one destination only can equally be caused by that destination's own "
                     "network or by ICMP rate limiting."
                     if not multiple
-                    else "Loss towards several destinations suggests the problem is upstream of your router rather than in one website."
+                    else "Loss towards several destinations suggests the problem is upstream "
+                    "of your router rather than in one website."
                 ),
                 recommendation=(
                     "Repeat the diagnosis at different times of day, confirm with the TCP checks, and "
                     "include this report when contacting your ISP."
                 ),
-                cannot_verify="NetPulse cannot attribute loss to a specific hop or to ISP congestion from end-to-end measurements alone.",
+                cannot_verify=(
+                        "NetPulse cannot attribute loss to a specific hop or to ISP congestion "
+                        "from end-to-end measurements alone."
+                    ),
                 category="wan",
             )
         )

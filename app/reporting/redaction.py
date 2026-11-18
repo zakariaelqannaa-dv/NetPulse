@@ -54,7 +54,10 @@ FIELD_LABELS: dict[str, str] = {
 FIELD_DESCRIPTIONS: dict[str, str] = {
     "computer_name": "The Windows computer name of this PC.",
     "local_ipv4": "Private IPv4 addresses of the active adapter.",
-    "local_ipv6": "Global IPv6 addresses of the active adapter (link-local addresses are already excluded).",
+    "local_ipv6": (
+        "Global IPv6 addresses of the active adapter "
+        "(link-local addresses are already excluded)."
+    ),
     "gateway": "The address of your router on the local network.",
     "dns_servers": "The DNS resolvers configured on the adapter.",
     "mac_addresses": "Hardware addresses of the network adapters.",
@@ -63,7 +66,10 @@ FIELD_DESCRIPTIONS: dict[str, str] = {
     "wifi_ssid": "The Wi-Fi network you were connected to.",
     "wifi_bssid": "The hardware address of the Wi-Fi access point.",
     "public_ip": "NetPulse does not look up your public IP; this entry is listed for completeness.",
-    "route_hop_addresses": "Router addresses along the traced path, which can identify your ISP and region.",
+    "route_hop_addresses": (
+        "Router addresses along the traced path, which can identify your ISP "
+        "and region."
+    ),
     "speed_test_url": "The download URL you entered for the optional speed test.",
 }
 
@@ -188,7 +194,7 @@ def redact_report_data(
     collected: list[SensitiveField] | None = None,
 ) -> dict[str, Any]:
     """Return a deep-copied report with the selected fields redacted."""
-    selected = {k for k in selected_keys}
+    selected = set(selected_keys)
     fields = collected if collected is not None else collect_sensitive_fields(report_data)
     originals: dict[str, str] = {}
     for item in fields:

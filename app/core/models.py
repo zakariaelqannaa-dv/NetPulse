@@ -11,7 +11,7 @@ import dataclasses
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
+from enum import Enum, StrEnum
 from typing import Any
 
 # --------------------------------------------------------------------------- #
@@ -19,7 +19,7 @@ from typing import Any
 # --------------------------------------------------------------------------- #
 
 
-class Severity(str, Enum):
+class Severity(StrEnum):
     """User facing rating used by cards, badges and the overall banner."""
 
     GOOD = "good"
@@ -38,7 +38,7 @@ SEVERITY_LABELS: dict[Severity, str] = {
 }
 
 
-class TestStatus(str, Enum):
+class TestStatus(StrEnum):
     """Execution status of a single diagnostic test."""
 
     PENDING = "pending"
@@ -53,7 +53,7 @@ class TestStatus(str, Enum):
     CANCELLED = "cancelled"
 
 
-class Confidence(str, Enum):
+class Confidence(StrEnum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -195,7 +195,12 @@ class AdapterInfo:
 
     @property
     def is_ethernet(self) -> bool:
-        return not self.is_wireless and "wi-fi" not in self.media_type.lower() and "wireless" not in self.media_type.lower()
+        media = self.media_type.lower()
+        return (
+            not self.is_wireless
+            and "wi-fi" not in media
+            and "wireless" not in media
+        )
 
     @property
     def primary_ipv4(self) -> str | None:

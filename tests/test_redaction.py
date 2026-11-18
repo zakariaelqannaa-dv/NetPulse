@@ -81,8 +81,9 @@ def test_default_selection_only_fields_with_values() -> None:
     report = _base_report()
     fields = collect_sensitive_fields(report)
     selected = default_selection(fields)
-    # All fields in _base_report have values, so all should be selected
-    assert selected == set(PLACEHOLDERS)
+    # All fields with values in _base_report should be selected (local_ipv6 and public_ip are empty)
+    expected = set(PLACEHOLDERS) - {"local_ipv6", "public_ip"}
+    assert selected == expected
 
 
 def test_placeholder_values() -> None:

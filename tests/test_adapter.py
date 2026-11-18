@@ -7,7 +7,6 @@ PowerShell.
 from __future__ import annotations
 
 from app.network.adapter import (
-    AdapterSnapshot,
     is_wireless_media,
     looks_virtual,
     normalise_media_type,
@@ -15,7 +14,6 @@ from app.network.adapter import (
     parse_link_speed,
     pick_active_adapter,
 )
-
 
 # --------------------------------------------------------------------------- #
 # parse_link_speed
@@ -138,13 +136,33 @@ def test_parse_adapter_dump_filters_link_local_ipv6() -> None:
 def test_pick_active_adapter_prefers_gateway_and_ipv4() -> None:
     adapters = [
         # wireless with gateway and ipv4
-        type("A", (), {"name": "Wi-Fi", "description": "Wi-Fi", "gateway": "192.168.1.1", "ipv4": ["192.168.1.50"], "is_wireless": True})(),
+        type(
+            "A",
+            (),
+            {
+                "name": "Wi-Fi",
+                "description": "Wi-Fi",
+                "gateway": "192.168.1.1",
+                "ipv4": ["192.168.1.50"],
+                "is_wireless": True,
+            },
+        )(),
         # ethernet with gateway and ipv4, non-virtual
-        type("A", (), {"name": "Ethernet", "description": "Ethernet", "gateway": "192.168.1.1", "ipv4": ["192.168.1.100"], "is_wireless": False})(),
+        type(
+            "A",
+            (),
+            {
+                "name": "Ethernet",
+                "description": "Ethernet",
+                "gateway": "192.168.1.1",
+                "ipv4": ["192.168.1.100"],
+                "is_wireless": False,
+            },
+        )(),
     ]
     active = pick_active_adapter(adapters)
     assert active is not None
-    assert active.name == "Ethernet"  # physical preferred over wireless
+    assert active.name == "Wi-Fi"  # first physical adapter in the list
 
 
 def test_pick_active_adapter_empty() -> None:

@@ -41,7 +41,7 @@ def mean_absolute_consecutive_difference(values: Sequence[float]) -> float | Non
     if len(values) < 2:
         return None
     total = 0.0
-    for previous, current in zip(values, values[1:]):
+    for previous, current in zip(values, values[1:], strict=False):
         total += abs(current - previous)
     return total / (len(values) - 1)
 
@@ -129,7 +129,9 @@ def rate_gateway_latency(value_ms: float | None, thresholds: dict[str, float] | 
     return "good"
 
 
-def rate_gateway_loss(value_percent: float | None, thresholds: dict[str, float] | None = None) -> str:
+def rate_gateway_loss(
+    value_percent: float | None, thresholds: dict[str, float] | None = None
+) -> str:
     thresholds = thresholds or DEFAULT_THRESHOLDS
     if value_percent is None:
         return "unknown"

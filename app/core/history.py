@@ -87,7 +87,7 @@ class HistoryEntry:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> HistoryEntry:
-        known = {f for f in cls.__dataclass_fields__}
+        known = set(cls.__dataclass_fields__)
         return cls(**{k: v for k, v in (data or {}).items() if k in known})
 
 

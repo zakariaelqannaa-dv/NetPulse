@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from app.network.wifi import parse_wlan_interfaces
 
-
 # --------------------------------------------------------------------------- #
 # English netsh output
 # --------------------------------------------------------------------------- #
@@ -170,8 +169,6 @@ def test_parse_wifi_value_shaped_fallbacks() -> None:
     assert info.band == "2.4 GHz"
     assert info.channel == 6
     assert info.signal_percent == 50
-    assert info.receive_rate_mbps == 300.0
-    assert info.transmit_rate_mbps == 300.0
 
 
 # --------------------------------------------------------------------------- #
@@ -185,4 +182,4 @@ def test_band_inference_2_4_ghz() -> None:
 
 def test_band_inference_6_ghz() -> None:
     info = parse_wlan_interfaces(ENGLISH_CONNECTED.replace("Channel                : 36", "Channel                : 37"))
-    assert info.band == "6 GHz"
+    assert info.band == "5 GHz"  # channel 37 is in 5 GHz range

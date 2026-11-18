@@ -395,9 +395,13 @@ class DashboardPage(QWidget):
     def _update_hero_from(self, gateway: list[Any], internet: list[Any]) -> None:
         best = None
         for ping in internet:
-            if ping is not None and ping.stats.received > 0 and ping.kind != "gateway":
-                if best is None or (ping.stats.mean_ms or 1e9) < (best.stats.mean_ms or 1e9):
-                    best = ping
+            if (
+                ping is not None
+                and ping.stats.received > 0
+                and ping.kind != "gateway"
+                and (best is None or (ping.stats.mean_ms or 1e9) < (best.stats.mean_ms or 1e9))
+            ):
+                best = ping
         if best is None:
             self._set_hero(gateway[0] if gateway else None, "Measured to your router only.")
             return

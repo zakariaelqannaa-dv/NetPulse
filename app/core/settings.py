@@ -70,7 +70,7 @@ class AppSettings:
 
     def normalized(self) -> AppSettings:
         """Return a copy with every value clamped/validated."""
-        settings = AppSettings(**{k: v for k, v in asdict(self).items()})
+        settings = AppSettings(**dict(asdict(self).items()))
         settings.theme = self.theme if self.theme in THEMES else "dark"
         settings.ping_count = _clamp(self.ping_count, 1, 500, 30)
         settings.gateway_count = _clamp(self.gateway_count, 1, 500, 30)
@@ -84,7 +84,9 @@ class AppSettings:
         settings.history_limit = _clamp(self.history_limit, 1, 500, 50)
         settings.speed_test_max_seconds = _clamp(self.speed_test_max_seconds, 3, 60, 10)
 
-        settings.internet_targets = _clean_hosts(self.internet_targets, DEFAULT_INTERNET_TARGETS, minimum=2)
+        settings.internet_targets = _clean_hosts(
+            self.internet_targets, DEFAULT_INTERNET_TARGETS, minimum=2
+        )
         settings.dns_hostnames = _clean_hostnames(self.dns_hostnames, DEFAULT_DNS_HOSTNAMES)
         settings.public_dns_servers = _clean_ips(self.public_dns_servers, DEFAULT_PUBLIC_DNS)
         settings.tcp_probes = _clean_probes(self.tcp_probes, DEFAULT_TCP_PROBES)
@@ -120,7 +122,7 @@ class AppSettings:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> AppSettings:
-        known = {f for f in cls.__dataclass_fields__}
+        known = set(cls.__dataclass_fields__)
         filtered = {k: v for k, v in (data or {}).items() if k in known}
         try:
             return cls(**filtered).normalized()

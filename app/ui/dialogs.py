@@ -69,8 +69,9 @@ class ExportDialog(QDialog):
         layout.addWidget(
             body(
                 "NetPulse lists everything in this report that could identify you or your network. "
-                "Clear a checkbox to replace those values with a neutral placeholder before the file "
-                "is written. Nothing is uploaded: the report is written to the path you choose."
+                "Clear a checkbox to replace those values with a neutral placeholder before "
+                "the file is written. Nothing is uploaded: the report is written to the path "
+                "you choose."
             )
         )
 
@@ -127,7 +128,7 @@ class ExportDialog(QDialog):
         layout.addWidget(buttons)
 
     def _set_all(self, checked: bool) -> None:
-        for key, box in self._checkboxes.items():
+        for _key, box in self._checkboxes.items():
             if box.isEnabled():
                 box.setChecked(checked)
             elif checked:
@@ -166,7 +167,10 @@ class ConfirmActionDialog(QDialog):
             "medium": "Medium risk",
             "high": "High risk",
         }.get(action.risk, action.risk)
-        meta = muted(f"{action.category}  |  {risk}" + ("  |  restart required" if action.requires_reboot else ""))
+        meta = muted(
+            f"{action.category}  |  {risk}"
+            + ("  |  restart required" if action.requires_reboot else "")
+        )
         layout.addWidget(meta)
 
         layout.addWidget(section_label("What this does"))
@@ -216,7 +220,9 @@ class ConfirmActionDialog(QDialog):
             QDialogButtonBox.StandardButton.Cancel | QDialogButtonBox.StandardButton.Apply
         )
         apply_button = buttons.button(QDialogButtonBox.StandardButton.Apply)
-        apply_button.setText("Apply change" if not action.is_destructive else "Apply destructive change")
+        apply_button.setText(
+            "Apply change" if not action.is_destructive else "Apply destructive change"
+        )
         apply_button.setProperty("accent", "true")
         if action.is_destructive:
             apply_button.setProperty("danger", "true")
@@ -247,25 +253,27 @@ class AboutDialog(QDialog):
         layout.addWidget(section_label("What NetPulse is"))
         layout.addWidget(
             body(
-                "An open-source diagnostic tool. It measures the link, your router, the internet path "
-                "and DNS resolution, then explains what it found in plain language."
+                "An open-source diagnostic tool. It measures the link, your router, "
+                "the internet path and DNS resolution. It explains what it found in "
+                "plain language."
             )
         )
 
         layout.addWidget(section_label("What NetPulse is not"))
         layout.addWidget(
             body(
-                "It is not an internet booster and it does not promise faster internet. NetPulse cannot "
-                "fix ISP congestion, radio interference, a damaged cable or router hardware, and it "
-                "never claims to."
+                "It is not an internet booster and it does not promise faster internet. "
+                "NetPulse cannot fix ISP congestion, radio interference, a damaged cable "
+                "or router hardware, and it never claims to."
             )
         )
 
         layout.addWidget(section_label("Privacy"))
         layout.addWidget(
             body(
-                "No telemetry, no accounts and no automatic uploads. Settings, history and snapshots "
-                "are stored locally and reports are only written when you export them."
+                "No telemetry, no accounts and no automatic uploads. Settings, history "
+                "and snapshots are stored locally and reports are only written when you "
+                "export them."
             )
         )
 
