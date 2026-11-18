@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "netpulse"
+version = "1.0.0"
+description = "Windows connection diagnostic and safe-configuration tool for latency, jitter, packet loss, DNS, Wi-Fi, Ethernet and route problems."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12"
+authors = [{ name = "NetPulse contributors" }]
+keywords = [
+    "windows",
+    "network",
+    "diagnostics",
+    "latency",
+    "jitter",
+    "packet-loss",
+    "dns",
+    "wifi",
+    "ethernet",
+    "troubleshooting",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Win32 (MS Windows)",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Operating System :: Microsoft :: Windows :: Windows 11",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Networking :: Monitoring",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "PySide6>=6.6",
+    "psutil>=5.9",
+]
+
+[project.urls]
+Homepage = "https://github.com/zakariaelqannaa-dv/NetPulse"
+Repository = "https://github.com/zakariaelqannaa-dv/NetPulse"
+Issues = "https://github.com/zakariaelqannaa-dv/NetPulse/issues"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "C4", "SIM"]
+# S603/S607 are ignored deliberately: NetPulse always launches subprocesses with
+# an explicit argument list and shell=False, and it locates Windows tools such as
+# ping/tracert/netsh by name on the system PATH.
+ignore = ["S603", "S607"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests may use plain asserts (S101) and, where relevant, string literals that
+# the hardcoded-password rules would flag (S105/S106); no real secret exists.
+"tests/*" = ["S101", "S105", "S106"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["error::DeprecationWarning:app.*"]

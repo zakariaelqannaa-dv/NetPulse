@@ -1,0 +1,94 @@
+name: Bug report
+description: Report a problem with NetPulse
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Before you continue, please
+        make sure you are running the latest release and that the problem is not
+        already explained in `docs/TROUBLESHOOTING.md`.
+
+        Exported NetPulse reports contain **personal information** such as IP
+        addresses, adapter names, your computer name and your Wi-Fi SSID. Redact
+        those fields in the export dialog before you attach a report.
+
+  - type: input
+    id: app-version
+    attributes:
+      label: NetPulse version
+      description: The version shown in the About dialog, or the output of `python -c "import app; print(app.APP_VERSION)"`.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: windows-version
+    attributes:
+      label: Windows version and build
+      description: Run `winver` and include the full version and build number.
+      placeholder: "Windows 11 Pro 23H2, build 22631.4460"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: connection-type
+    attributes:
+      label: Connection type
+      description: How is this PC connected to the internet?
+      options:
+        - Ethernet
+        - Wi-Fi
+        - Fibre
+        - Cable
+        - DSL
+        - Fixed wireless
+        - Mobile (4G/5G)
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the behaviour you saw, including the exact wording of any finding or error.
+      placeholder: "The diagnosis reported ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      description: Describe what you expected to happen instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: List the smallest set of steps that reliably reproduces the problem.
+      placeholder: |
+        1. Open NetPulse
+        2. Click "Start Diagnosis"
+        3. ...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: redaction
+    attributes:
+      label: Before attaching a report
+      options:
+        - label: I have redacted the exported report before attaching it (or I am not attaching one).
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        Reminder: exported reports contain personal information such as IP
+        addresses, adapter names, the computer name and the Wi-Fi SSID. Use the
+        redaction options in the export dialog, and only attach what is needed.

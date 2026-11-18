@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/zakariaelqannaa-dv/NetPulse/blob/main/SECURITY.md
+    about: Please read SECURITY.md and report security issues privately, not as a public issue.

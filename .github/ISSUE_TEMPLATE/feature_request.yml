@@ -1,0 +1,36 @@
+name: Feature request
+description: Suggest an idea or improvement for NetPulse
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Please describe the problem you are
+        trying to solve before describing the solution — it helps us evaluate the
+        request.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the situation or limitation you ran into.
+      placeholder: "When I ... I cannot ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe what you would like NetPulse to do instead.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: scope-acknowledgement
+    attributes:
+      label: Scope acknowledgement
+      options:
+        - label: I understand that NetPulse must never promise to fix ISP congestion, radio signal, damaged cables or router hardware problems, and that such suggestions will not be accepted.
+          required: true
