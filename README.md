@@ -27,7 +27,7 @@ NetPulse cannot verify**.
 NetPulse aims to answer one question honestly: *is the problem inside my PC,
 between my PC and the router, or beyond the router?*
 
-## What NetPulse is not
+## What NetPulse 
 
 NetPulse is **not an "internet booster"** and does not promise a one-click fix.
 
@@ -326,6 +326,9 @@ participants are expected to follow the
 
 Security issues should be reported privately as described in
 [SECURITY.md](SECURITY.md).
+
+## Author 
+Zakariaelqannaa-dv ("https://github.com/zakariaelqannaa-dv")
 
 ---
 
